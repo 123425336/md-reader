@@ -1,0 +1,37 @@
+/* 墨阅 · 代码高亮配色（浅色/深色两套，随主题明暗自动切换） */
+
+:root {
+  --hl-keyword: #A6405A;
+  --hl-string: #3D7A3A;
+  --hl-number: #9A5B13;
+  --hl-comment: #9A968A;
+  --hl-title: #2F62B5;
+  --hl-type: #8A4FB0;
+  --hl-attr: #1F7A86;
+  --hl-meta: #8A6A3A;
+  --hl-variable: #B8512C;
+}
+:root[data-dark="1"] {
+  --hl-keyword: #F08AA8;
+  --hl-string: #9FD39A;
+  --hl-number: #F2B676;
+  --hl-comment: #807C72;
+  --hl-title: #8DB7F5;
+  --hl-type: #C9A2F0;
+  --hl-attr: #7FCFD9;
+  --hl-meta: #D9B98A;
+  --hl-variable: #F2A07E;
+}
+
+.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-doctag, .hljs-template-tag { color: var(--hl-keyword); }
+.hljs-string, .hljs-regexp, .hljs-addition, .hljs-template-variable, .hljs-selector-attr { color: var(--hl-string); }
+.hljs-number, .hljs-symbol, .hljs-bullet, .hljs-link { color: var(--hl-number); }
+.hljs-comment, .hljs-quote { color: var(--hl-comment); font-style: italic; }
+.hljs-title, .hljs-section, .hljs-title.function_ { color: var(--hl-title); }
+.hljs-type, .hljs-built_in, .hljs-title.class_, .hljs-class .hljs-title { color: var(--hl-type); }
+.hljs-attr, .hljs-attribute, .hljs-name, .hljs-tag, .hljs-selector-id, .hljs-selector-class, .hljs-property { color: var(--hl-attr); }
+.hljs-meta, .hljs-meta .hljs-keyword { color: var(--hl-meta); }
+.hljs-variable, .hljs-params, .hljs-subst, .hljs-selector-pseudo { color: var(--hl-variable); }
+.hljs-deletion { color: #C9473A; }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: 700; }

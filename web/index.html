@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https: http:; font-src 'self' data:; connect-src 'self'; worker-src 'self' blob:; media-src 'self' https: http:; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>墨阅</title>
+  <link rel="stylesheet" href="vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/content.css">
+  <link rel="stylesheet" href="css/hljs.css">
+  <script type="module" src="js/main.js"></script>
+</head>
+<body>
+  <div id="app" class="app no-doc">
+    <!-- 侧栏：目录 / 书签 -->
+    <aside id="sidebar" class="sidebar" aria-label="侧栏">
+      <div class="sb-head">
+        <div class="sb-tabs" role="tablist">
+          <button class="sb-tab on" data-tab="toc" role="tab">目录</button>
+          <button class="sb-tab" data-tab="bookmarks" role="tab">书签</button>
+        </div>
+        <button class="icon-btn sm" id="btn-sb-close" title="收起侧栏 (Ctrl+B)" data-icon="panel"></button>
+      </div>
+      <div class="sb-filter" id="toc-filter-box">
+        <span data-icon="search"></span>
+        <input id="toc-filter" type="search" placeholder="筛选标题" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="sb-tools" id="toc-tools">
+        <span id="toc-count"></span>
+        <span class="grow"></span>
+        <button class="icon-btn sm" id="btn-toc-locate" title="定位到当前章节" data-icon="locate"></button>
+        <button class="icon-btn sm" id="btn-toc-expand" title="全部展开" data-icon="expand"></button>
+        <button class="icon-btn sm" id="btn-toc-collapse" title="全部折叠" data-icon="collapse"></button>
+      </div>
+      <div class="sb-body" id="sb-body">
+        <nav id="toc" class="toc"></nav>
+        <div id="bookmarks" hidden></div>
+      </div>
+      <div class="sb-foot" id="sb-foot"></div>
+      <div class="sb-resizer" id="sb-resizer" title="拖动调整宽度"></div>
+    </aside>
+
+    <!-- 主区域 -->
+    <main id="main" class="main">
+      <div class="progress-line" id="progress-line"><i></i></div>
+      <header id="topbar" class="topbar">
+        <button class="icon-btn" id="btn-sidebar" title="显示/隐藏侧栏 (Ctrl+B)" data-icon="panel"></button>
+        <div class="tb-title" id="tb-title">
+          <span class="tb-doc" id="tb-doc"></span>
+          <span class="tb-sep" id="tb-sep" hidden>/</span>
+          <span class="tb-chapter" id="tb-chapter"></span>
+        </div>
+        <div class="tb-right">
+          <span class="tb-pct" id="tb-pct" hidden title="阅读进度"></span>
+          <button class="icon-btn" id="btn-search" title="查找 (Ctrl+F)" data-icon="search"></button>
+          <button class="icon-btn" id="btn-bookmark" title="添加书签 (Ctrl+D)" data-icon="bookmark"></button>
+          <button class="icon-btn" id="btn-appearance" title="外观" data-icon="type"></button>
+          <button class="icon-btn" id="btn-menu" title="更多" data-icon="more"></button>
+        </div>
+      </header>
+
+      <div id="reader" class="reader" tabindex="-1">
+        <div class="doc-wrap" id="doc-wrap">
+          <div id="notice" class="notice-bar" hidden></div>
+          <article id="doc" class="markdown-body"></article>
+        </div>
+      </div>
+
+      <section id="welcome" class="welcome">
+        <div class="welcome-inner">
+          <div class="wl-brand">
+            <svg class="wl-logo" viewBox="0 0 64 64" aria-hidden="true">
+              <rect x="2" y="2" width="60" height="60" rx="16" fill="var(--accent)"/>
+              <path d="M18 18h20a8 8 0 0 1 8 8v20H26a8 8 0 0 1-8-8V18z" fill="none" stroke="#FFF8F0" stroke-width="3.2" stroke-linejoin="round"/>
+              <path d="M25 27h14M25 33h14M25 39h9" stroke="#FFF8F0" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <div class="wl-name">墨阅</div>
+          </div>
+          <p class="wl-sub">打开一份 Markdown，安静地读完它。<br>进度会被妥善记住，下次从你停下的地方继续。</p>
+          <div class="wl-actions">
+            <button class="btn primary lg" id="btn-open"><span data-icon="folder"></span>打开文件</button>
+            <span class="wl-hint"><span class="kbd">Ctrl</span> + <span class="kbd">O</span>，或把 .md 文件拖进窗口</span>
+          </div>
+          <div class="wl-section-title"><span>继续阅读</span><button class="btn ghost sm" id="btn-clear-recent" hidden>清空列表</button></div>
+          <div class="recent-list" id="recent-list"></div>
+        </div>
+      </section>
+
+      <div id="loading" class="loading" hidden>
+        <div class="loading-box"><div class="spinner"></div><span id="loading-text">正在排版…</span></div>
+      </div>
+
+      <div id="search-bar" class="search-bar" hidden>
+        <span data-icon="search"></span>
+        <input id="search-input" type="text" placeholder="在文档中查找" autocomplete="off" spellcheck="false">
+        <span class="search-count" id="search-count"></span>
+        <span class="search-sep"></span>
+        <button class="icon-btn sm" id="search-case" title="区分大小写" data-icon="case"></button>
+        <button class="icon-btn sm" id="search-prev" title="上一个 (Shift+Enter)" data-icon="up"></button>
+        <button class="icon-btn sm" id="search-next" title="下一个 (Enter)" data-icon="down"></button>
+        <button class="icon-btn sm" id="search-close" title="关闭 (Esc)" data-icon="close"></button>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-host" class="toast-host" aria-live="polite"></div>
+  <input type="file" id="file-input" accept=".md,.markdown,.mdown,.mkd,.mkdn,.mdx,.txt,text/markdown,text/plain" hidden>
+</body>
+</html>

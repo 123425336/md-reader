@@ -1,0 +1,38 @@
+// 墨阅 · 资源脚本（图标、清单、版本信息与内嵌界面资源）
+#pragma code_page(65001)
+#include <windows.h>
+#include "resource.h"
+
+IDI_APP ICON "app.ico"
+
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST "app.manifest"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+ FILEFLAGS 0x0L
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080404b0"
+        BEGIN
+            VALUE "FileDescription", "墨阅 Markdown 阅读器"
+            VALUE "FileVersion", "1.0.0.0"
+            VALUE "InternalName", "MdReader"
+            VALUE "OriginalFilename", "MdReader.exe"
+            VALUE "ProductName", "墨阅"
+            VALUE "ProductVersion", "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 1200
+    END
+END
+
+// 由构建脚本生成：web 目录下的全部界面文件
+#include "web_resources.rc"

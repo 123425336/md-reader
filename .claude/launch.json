@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "mdreader-dev",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["tools/dev_server.py", "5178"],
+      "port": 5178
+    }
+  ]
+}

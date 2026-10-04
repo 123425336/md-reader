@@ -1,0 +1,12 @@
+# 文本文件在版本库中统一为 LF
+* text=auto
+
+# 批处理文件必须保持 CRLF，否则命令行解释器可能解析出错
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# 二进制文件
+*.exe binary
+*.ico binary
+*.png binary
+*.woff2 binary

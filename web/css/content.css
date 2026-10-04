@@ -1,0 +1,348 @@
+/* 墨阅 · 正文排版样式 */
+
+.doc-wrap {
+  min-height: 100%;
+  padding: 0 40px;
+}
+
+.markdown-body {
+  position: relative;
+  max-width: var(--content-w);
+  margin: 0 auto;
+  padding: calc(var(--topbar-h) + 44px) 0 46vh;
+  font-family: var(--font-body);
+  font-size: var(--fs);
+  line-height: var(--lh);
+  color: var(--text);
+  text-align: var(--align);
+  text-autospace: var(--autospace);
+  overflow-wrap: break-word;
+  word-break: normal;
+  line-break: auto;
+  font-kerning: normal;
+  font-variant-numeric: proportional-nums;
+  hanging-punctuation: allow-end;
+}
+
+/* 分块：屏幕外的块跳过排版与绘制，保证超长文档流畅 */
+.markdown-body > .chunk {
+  display: block;
+  content-visibility: auto;
+}
+.markdown-body.printing > .chunk { content-visibility: visible; contain-intrinsic-size: none !important; }
+
+/*
+ * 间距约定：块元素只使用上边距（标题额外带下边距）。
+ * 每个分块都是独立排版容器，边距不会跨分块合并；只用上边距可保证分块边界处的间距与其他位置完全一致。
+ */
+.markdown-body > .chunk:first-child > :first-child { margin-top: 0; }
+.markdown-body :is(li, blockquote, td, th, details, .alert, .footnotes li) > :first-child { margin-top: 0; }
+
+.markdown-body .empty-doc { color: var(--text-3); text-align: center; margin-top: 20vh; }
+
+/* —— 段落 —— */
+.markdown-body p { margin: var(--ps) 0 0; text-indent: var(--indent); }
+.markdown-body li > p, .markdown-body blockquote p, .markdown-body td p, .markdown-body .alert p { text-indent: 0; }
+/* 引用、表格、公式、代码等较“重”的块之后多留一些空隙 */
+.markdown-body :is(blockquote, .table-wrap, .math-block, .code-block, hr, details, .front-matter) + :is(p, ul, ol) { margin-top: 1.25em; }
+
+/* —— 标题 —— */
+.markdown-body h1, .markdown-body h2, .markdown-body h3,
+.markdown-body h4, .markdown-body h5, .markdown-body h6 {
+  font-family: var(--font-display);
+  color: var(--heading);
+  font-weight: 600;
+  line-height: 1.38;
+  text-align: start;
+  text-indent: 0;
+  scroll-margin-top: calc(var(--topbar-h) + 16px);
+  letter-spacing: .01em;
+}
+.markdown-body h1 { font-size: 1.9em; margin: 1.6em 0 .9em; letter-spacing: .03em; }
+.markdown-body h2 { font-size: 1.5em; margin: 2.1em 0 .85em; }
+.markdown-body h3 { font-size: 1.24em; margin: 1.75em 0 .7em; }
+.markdown-body h4 { font-size: 1.08em; margin: 1.5em 0 .6em; }
+.markdown-body h5 { font-size: 1em; margin: 1.4em 0 .5em; }
+.markdown-body h6 { font-size: .95em; margin: 1.4em 0 .5em; color: var(--text-2); }
+
+/* 文档首个一级标题作为书名居中显示 */
+.markdown-body > .chunk:first-child > h1:first-child {
+  text-align: center;
+  font-size: 2.05em;
+  margin: .2em 0 1.4em;
+  letter-spacing: .06em;
+}
+.markdown-body > .chunk:first-child > h1:first-child::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 2px;
+  margin: .7em auto 0;
+  border-radius: 2px;
+  background: var(--accent);
+  opacity: .75;
+}
+
+.markdown-body h2 + h3, .markdown-body h3 + h4 { margin-top: .9em; }
+
+/* —— 强调 —— */
+.markdown-body strong, .markdown-body b { font-weight: 650; color: var(--heading); }
+.markdown-body em, .markdown-body i { font-style: italic; }
+.markdown-body del, .markdown-body s { color: var(--text-2); }
+.markdown-body mark {
+  background: color-mix(in srgb, #F2C24B 38%, transparent);
+  color: inherit;
+  padding: .05em .15em;
+  border-radius: 3px;
+}
+
+/* —— 链接 —— */
+.markdown-body a {
+  color: var(--link);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--link) 35%, transparent);
+  text-underline-offset: .2em;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color .15s;
+}
+.markdown-body a:hover { text-decoration-color: var(--link); }
+
+/* —— 引用 —— */
+.markdown-body blockquote {
+  margin: 1.3em 0 0;
+  padding: .15em 0 .15em 1.15em;
+  border-left: 3px solid var(--quote-bar);
+  color: var(--text-2);
+}
+.markdown-body blockquote p { margin-top: .5em; }
+.markdown-body blockquote blockquote { margin-top: .8em; }
+
+/* 提示块 */
+.markdown-body .alert {
+  --alert: #4A7BD0;
+  padding: .75em 1.1em .8em;
+  border-left: 3px solid var(--alert);
+  border-radius: 0 10px 10px 0;
+  background: color-mix(in srgb, var(--alert) 7%, transparent);
+  color: var(--text);
+}
+.markdown-body .alert-tip { --alert: #3E8B5C; }
+.markdown-body .alert-important { --alert: #8257C9; }
+.markdown-body .alert-warning { --alert: #C98A18; }
+.markdown-body .alert-caution { --alert: #C9473A; }
+.markdown-body .alert-title {
+  margin: 0 0 .35em;
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: .9em;
+  color: var(--alert);
+  text-indent: 0;
+}
+
+/* —— 列表 —— */
+.markdown-body ul, .markdown-body ol { margin: var(--ps) 0 0; padding-left: 1.7em; }
+.markdown-body li { margin: .3em 0 0; }
+.markdown-body li > p { margin-top: .45em; }
+.markdown-body li > ul, .markdown-body li > ol { margin-top: .3em; }
+.markdown-body li::marker { color: var(--text-3); }
+.markdown-body ol > li::marker { font-variant-numeric: tabular-nums; }
+.markdown-body .task-list { list-style: none; padding-left: 1.7em; }
+.markdown-body .task-item { position: relative; }
+.markdown-body .task-box {
+  position: absolute;
+  left: -1.55em;
+  top: .42em;
+  width: 1em;
+  height: 1em;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+/* —— 分割线 —— */
+.markdown-body hr {
+  border: 0;
+  height: auto;
+  margin: 2.4em 0 0;
+  text-align: center;
+  overflow: visible;
+}
+.markdown-body hr::before {
+  content: "· · ·";
+  color: var(--text-3);
+  letter-spacing: .6em;
+  font-size: 1.1em;
+}
+
+/* —— 行内代码与代码块 —— */
+.markdown-body code {
+  font-family: var(--font-mono);
+  font-size: .86em;
+  padding: .12em .38em;
+  border-radius: 5px;
+  background: var(--code-bg);
+  color: var(--code-text);
+  overflow-wrap: anywhere;
+}
+.markdown-body .code-block {
+  margin: 1.3em 0 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--code-bg);
+  overflow: hidden;
+  text-align: left;
+}
+.markdown-body .code-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 34px;
+  padding: 0 8px 0 14px;
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--text-3);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+}
+.markdown-body .code-copy {
+  border: 0;
+  background: transparent;
+  color: var(--text-3);
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.markdown-body .code-copy:hover { background: var(--hover); color: var(--text); }
+.markdown-body .code-block pre { margin: 0; padding: 14px 16px; overflow-x: auto; }
+.markdown-body pre { line-height: 1.6; tab-size: 4; }
+.markdown-body pre code {
+  padding: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: .84em;
+  white-space: pre;
+  overflow-wrap: normal;
+  border-radius: 0;
+}
+
+/* —— 表格 —— */
+.markdown-body .table-wrap {
+  margin: 1.4em 0 0;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9em;
+  line-height: 1.65;
+  text-align: left;
+}
+.markdown-body th, .markdown-body td {
+  padding: .6em .95em;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 85%, transparent);
+  vertical-align: top;
+  text-indent: 0;
+}
+.markdown-body th + th, .markdown-body td + td { border-left: 1px solid color-mix(in srgb, var(--border) 55%, transparent); }
+.markdown-body th {
+  background: color-mix(in srgb, var(--surface-2) 75%, transparent);
+  color: var(--heading);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.markdown-body tbody tr:last-child td { border-bottom: 0; }
+.markdown-body tbody tr:nth-child(even) { background: color-mix(in srgb, var(--surface-2) 32%, transparent); }
+.markdown-body th[style*="center"], .markdown-body td[style*="center"] { text-align: center; }
+.markdown-body th[style*="right"], .markdown-body td[style*="right"] { text-align: right; }
+
+/* —— 图片 —— */
+.markdown-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  cursor: zoom-in;
+  vertical-align: middle;
+}
+.markdown-body p > img:only-child { display: block; margin: 1.2em auto; }
+
+/* —— 公式 —— */
+.markdown-body .katex {
+  font-size: var(--math-scale);
+  font-family: KaTeX_Main, math, "Times New Roman", var(--font-cjk);
+  text-indent: 0;
+  text-rendering: auto;
+}
+.markdown-body .katex .cjk_fallback { font-family: var(--font-cjk); }
+.markdown-body .math-block {
+  margin: 1.25em 0 0;
+  padding: .35em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+  text-indent: 0;
+}
+.markdown-body .math-block .katex-display { margin: 0; }
+.markdown-body .katex-display { overflow-x: auto; overflow-y: hidden; padding: .2em 0; }
+.markdown-body .katex-display > .katex { white-space: nowrap; }
+.markdown-body .math-error {
+  font-family: var(--font-mono);
+  font-size: .85em;
+  color: #C2410C;
+  background: color-mix(in srgb, #C2410C 9%, transparent);
+  border-radius: 5px;
+  padding: .1em .35em;
+  cursor: help;
+  white-space: pre-wrap;
+}
+.markdown-body .math-error-block { display: block; text-align: left; padding: .6em .8em; }
+
+/* —— 脚注 —— */
+.markdown-body .footnote-ref a { text-decoration: none; font-size: .8em; padding: 0 .1em; }
+.markdown-body .footnotes-sep { margin: 3em 0 0; }
+.markdown-body .footnotes { font-size: .9em; color: var(--text-2); }
+.markdown-body .footnote-backref { text-decoration: none; }
+
+/* —— 其它 —— */
+.markdown-body details { margin: 1em 0 0; }
+.markdown-body summary { cursor: pointer; color: var(--text-2); }
+.markdown-body .front-matter {
+  margin: 0;
+  padding: .55em .9em;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: var(--font-ui);
+  font-size: .82em;
+}
+.markdown-body .front-matter pre { margin: .5em 0 .2em; white-space: pre-wrap; }
+.markdown-body kbd {
+  font-family: var(--font-mono);
+  font-size: .82em;
+  padding: .1em .4em;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--surface);
+}
+.markdown-body sup, .markdown-body sub { line-height: 0; }
+.markdown-body dl dt { font-weight: 600; margin-top: .6em; }
+.markdown-body dl dd { margin-left: 1.6em; }
+
+/* 搜索高亮（不改动文档结构） */
+::highlight(search-hit) { background-color: var(--mark-bg); color: inherit; }
+::highlight(search-current) { background-color: var(--mark-current); color: #1a1205; }
+
+/* 跳转定位时的短暂提示 */
+.markdown-body .flash { animation: flash 1.4s ease-out; border-radius: 6px; }
+@keyframes flash {
+  0%, 30% { background-color: var(--accent-soft); }
+  100% { background-color: transparent; }
+}
+
+/* 打印 */
+@media print {
+  html, body { overflow: visible !important; height: auto !important; background: #fff !important; }
+  .sidebar, .topbar, .progress-line, .search-bar, .toast-host, .loading { display: none !important; }
+  .app, .main, .reader { position: static !important; overflow: visible !important; display: block !important; }
+  .markdown-body { padding: 0 !important; max-width: none !important; color: #000; }
+  .markdown-body > .chunk { content-visibility: visible !important; contain-intrinsic-size: none !important; }
+}

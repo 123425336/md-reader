@@ -1,0 +1,6 @@
+# 编译中间产物（由 build.cmd 重新生成）
+build/
+*.pdb
+
+# 内嵌浏览器开发包：首次构建时由 build.ps1 自动下载
+third_party/webview2/
